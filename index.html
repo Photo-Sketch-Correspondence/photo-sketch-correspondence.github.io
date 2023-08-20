@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="We introduce a new benchmark and a weakly-supervised method
+        for learning the dense correspondences between photos and sketches.">
+  <!-- <meta name="keywords" content="correspondences learning,"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learning Dense Correspondences between Photos and Sketches</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JH8GVMR02"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-1JH8GVMR02');
+  </script>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <link rel="icon" href="./static/images/favicon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Learning Dense Correspondences between Photos and Sketches</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://xuanchenlu.com">Xuanchen Lu</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://xiaolonw.github.io/">Xiaolong Wang</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://cogtoolslab.github.io/">Judith Fan</a><sup>1,2</sup>,
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of California San Diego,</span>
+            <span class="author-block"><sup>2</sup>Stanford University</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2307.12967"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/cogtoolslab/photo-sketch-correspondence"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="https://github.com/cogtoolslab/photo-sketch-correspondence/blob/main/PSC6K_Benchmark_README.md"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Dataset</span>
+                  </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop playsinline height="100%">
+        <source src="./static/videos/teaser_v2.mp4" type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        We introduce a new benchmark and a weakly-supervised method
+        for learning the dense correspondences between photos and sketches.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Humans effortlessly grasp the connection between sketches and real-world objects, even when these sketches are far from
+            realistic. Moreover, human sketch understanding goes beyond categorization - critically, it also entails understanding how
+            individual elements within a sketch correspond to parts of the physical world it represents.
+            What are the computational ingredients needed to support this ability?
+          </p>
+          <p>
+            Towards answering this question, we make two contributions: first, we introduce a new sketch-photo correspondence
+            benchmark, <i>PSC6K</i>, containing 150K annotations of 6250 sketch-photo pairs across 125 object categories,
+            augmenting the existing Sketchy dataset with fine-grained correspondence metadata.
+            Second, we propose a self-supervised method for learning dense correspondences between sketch-photo pairs, building upon
+            recent advances in correspondence learning for pairs of photos.
+            Our model uses a spatial transformer network to estimate the warp flow between latent representations of a sketch and
+            photo extracted by a contrastive learning-based ConvNet backbone.
+          </p>
+          <p>
+            We found that this approach outperformed several strong baselines and produced predictions that were quantitatively
+            consistent with other warp-based methods.
+            However, our benchmark also revealed systematic differences between predictions of the suite of models we tested and
+            those of humans.
+            Taken together, our work suggests a promising path towards developing artificial systems that achieve more human-like
+            understanding of visual images at different levels of abstraction.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+</section>
+
+
+<section class="section" style="padding-bottom: 0px;">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered">
+
+      <!-- Datasets. -->
+      <div class="column is-full-width">
+        <div class="content">
+          <h2 class="title is-3">Creating the Photo-Sketch Correspondence Benchmark (PSC6K)</h2>
+          <div class="has-text-justified">
+            <p>
+              We develop a novel sketch-photo correspondence benchmark,
+              <a href="https://github.com/cogtoolslab/photo-sketch-correspondence/blob/main/PSC6K_Benchmark_README.md"><i>PSC6K</i></a>,
+              augmenting the <a href="http://sketchy.eye.gatech.edu"><i>Sketchy dataset</i></a>
+              with fine-grained keypoint annotations.
+              We recruited 1,384 participants to provide annotations with crowdsourcing.
+              Our benchmark contains <b>150,000 annotations</b> across <b>6,250 photo-sketch
+              pairs</b> from <b>125 object categories</b>.
+              Compared to existing datasets in sketch understanding that focus on
+              category or instance-level information, our benchmark establishes detailed mapping
+              between parts of a sketch with parts of the object it represents,
+              allowing analysis in fine-grained multi-modal image understanding.
+              We show examples from our benchmark below.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-1">
+          <img id="1" src="./static/images/dataset1.png">
+        </div>
+        <div class="item item-2">
+          <img id="2" src="./static/images/dataset2.png">
+        </div>
+        <div class="item item-3">
+          <img id="3" src="./static/images/dataset3.png">
+        </div>
+        <div class="item item-4">
+          <img id="4" src="./static/images/dataset4.png">
+        </div>
+        <div class="item item-5">
+          <img id="5" src="./static/images/dataset5.png">
+        </div>
+        <div class="item item-6">
+          <img id="6" src="./static/images/dataset6.png">
+        </div>
+        <div class="item item-7">
+          <img id="7" src="./static/images/dataset7.png">
+        </div>
+        <div class="item item-8">
+          <img id="8" src="./static/images/dataset8.png">
+        </div>
+        <div class="item item-9">
+          <img id="9" src="./static/images/dataset9.png">
+        </div>
+        <div class="item item-10">
+          <img id="10" src="./static/images/dataset10.png">
+        </div>
+        <div class="item item-11">
+          <img id="11" src="./static/images/dataset11.png">
+        </div>
+        <div class="item item-12">
+          <img id="12" src="./static/images/dataset12.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered">
+
+      <!-- Framework. -->
+      <div class="column is-full-width">
+        <div class="content">
+          <h2 class="title is-3">Learning Dense Photo-Sketch Correspondences</h2>
+          <div class="content">
+            <img src="./static/images/diagram_srgb.png">
+          </div>
+          <div class="has-text-justified">
+            <p>
+              Our framework learns the correspondences between photos and sketches
+              by estimating a dense displacement field that warps one image to the other.
+              This approach embodies the hypothesis that sketches preserve key information about
+              spatial relations between an object's parts, despite distortions in their size and shape.
+              The framework consists of a <b>multi-modal feature encoder</b> that aligns the photo-sketch
+              representation with a contrastive loss, and an <b>Spatial Transformer Network (STN) based warp estimator</b>
+              to predict transformation that maximizes the similarity between feature maps of the two images.
+              The estimator learns to optimize a combination of weighted perceptual
+              similarity and forward-backward consistency.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+    <!-- Framework. -->
+      <div class="column is-full-width">
+        <div class="content">
+          <h2 class="title is-3">Testing on Novel Photos and Sketches</h2>
+          <div>
+            <div class="has-text-justified">
+              <p>
+                We exhibit examples of photo-sketch correspondence estimated with our method.
+                For each photo-sketch pair, we show the annotated keypoints from our benchmark PSC6K (first column),
+                the predicted correspondences (second column), and the result of warping the photo to
+                the sketch (third column).
+              </p>
+            </div>
+            <div class="row" style="margin-left: -10px; margin-right: -10px;">
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result1.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result2.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result3.png">
+              </div>
+            </div>
+            <div class="row" style="margin-left: -10px; margin-right: -10px;">
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result4.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result5.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result6.png">
+              </div>
+            </div>
+            <div class="row" style="margin-left: -10px; margin-right: -10px;">
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result7.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result8.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result9.png">
+              </div>
+            </div>
+            <div class="row" style="margin-left: -10px; margin-right: -10px;">
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result10.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result11.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result12.png">
+              </div>
+            </div>
+            <div class="row" style="margin-left: -10px; margin-right: -10px;">
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result13.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result14.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result15.png">
+              </div>
+            </div>
+            <div class="row" style="margin-left: -10px; margin-right: -10px;">
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result16.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result17.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result18.png">
+              </div>
+            </div>
+            <div class="row content" style="margin-left: -10px; margin-right: -10px;">
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result19.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result20.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/result21.png">
+              </div>
+            </div>
+            <div class="has-text-justified">
+              <p>
+                Lastly, we show examples of three typical failure patterns. The method has
+                degraded performance in 1) discriminating between commonly cooccurred objects;
+                2) aligning fine structures due to low-resolution feature maps; and 3) handling
+                non-continuous transformations caused by large changes in perspective and structure.
+                We think that improving model performance in such cases are prime targets for future work.
+              </p>
+            </div>
+            <div class="row" style="margin-left: -10px; margin-right: -10px;">
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/failure1.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/failure2.png">
+              </div>
+              <div class="col-4" style="padding:5px">
+                <img src="./static/images/failure3.png">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{lu2023learning,
+  author    = {Lu, Xuanchen and Wang, Xiaolong and Fan, Judith E},
+  title     = {Learning Dense Correspondences between Photos and Sketches},
+  journal   = {ICML},
+  year      = {2023},
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/files/xxx.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/cogtoolslab/photo-sketch-correspondence" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p style="text-align:center;">
+            Thanks to <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> for the website template.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
